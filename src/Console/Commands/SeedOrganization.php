@@ -17,7 +17,7 @@ class SeedOrganization extends Command
 
     protected $description = 'Seed database for a specific organization or database';
 
-    public function handle()
+    public function handle(): void
     {
         $organizationId = $this->option('organizationId');
         $databaseName = $this->option('database');

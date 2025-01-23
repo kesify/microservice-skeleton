@@ -2,9 +2,9 @@
 
 namespace Kesify\MicroserviceSkeleton\Models;
 
-use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kesify\MicroserviceSkeleton\Traits\UUID;
 
 class OrganizationUser extends Model
 {

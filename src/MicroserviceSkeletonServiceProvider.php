@@ -2,6 +2,7 @@
 
 namespace Kesify\MicroserviceSkeleton;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
@@ -22,6 +23,11 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
             \Kesify\MicroserviceSkeleton\Console\Commands\RollbackOrganization::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\SeedOrganization::class,
         ]);
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/microservice.php',
+            'microservice'
+        );
     }
 
     /**
@@ -31,6 +37,11 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        $this->publishes([
+            __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
+        ], 'microservice-config');
+
         // Middleware registrieren
         $this->registerMiddleware();
         $this->addDatabaseConnection();
@@ -38,6 +49,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
 
     /**
      * Register middleware for the package.
+     * @throws BindingResolutionException
      */
     protected function registerMiddleware(): void
     {
@@ -49,19 +61,6 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
 
     protected function addDatabaseConnection(): void
     {
-        Config::set('database.connections.organization', [
-                'driver' => 'mysql',
-                'host' => env('ORGANIZATION_DB_HOST', '127.0.0.1'),
-                'port' => env('ORGANIZATION_DB_PORT', '3306'),
-                'database' => env('ORGANIZATION_DB_NAME', 'organization_db'),
-                'username' => env('ORGANIZATION_DB_USERNAME', 'root'),
-                'password' => env('ORGANIZATION_DB_PASSWORD', ''),
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'prefix' => '',
-                'strict' => true,
-                'engine' => null,
-            ]
-        );
+        Config::set('database.connections.organization', Config::get('microservice.organization_connection'));
     }
 }
