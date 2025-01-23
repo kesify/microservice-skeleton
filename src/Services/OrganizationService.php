@@ -3,14 +3,16 @@
 namespace Kesify\MicroserviceSkeleton\Services;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Kesify\MicroserviceSkeleton\Models\Organization;
+use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 
 class OrganizationService
 {
     public function getOrganization($organizationId = null)
     {
-        $organizationId = $organizationId ?? $this->organizationId;
         if($organizationId){
             return Organization::findOrFail($organizationId);
         }
@@ -20,7 +22,7 @@ class OrganizationService
     public function setOrganizationDatabase($db): ?true
     {
         if($db){
-            \App\Services\config(['database.connections.organization.database' => $db]);
+            Config::set(['database.connections.organization.database' => $db]);
             DB::purge('organization'); // Purges the current connection
             DB::reconnect('organization'); // Reconnects using the modified config
             DB::connection('organization')->setPdo(null);
@@ -97,8 +99,7 @@ class OrganizationService
 
     public function switchOrganization($organizationId = null): ?array
     {
-        $organizationId = $organizationId ?? $this->organizationId;
-        $token = \App\Services\config('session.token');
+        $token = Config::get('session.token');
         $organization = $this->getOrganization($organizationId);
 
         if($token && $organization){

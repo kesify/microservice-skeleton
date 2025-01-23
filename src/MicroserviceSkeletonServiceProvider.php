@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
+use Kesify\MicroserviceSkeleton\Models\Organization;
+use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 
 class MicroserviceSkeletonServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,9 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind('Organization', Organization::class);
+        $this->app->bind('OrganizationUser', OrganizationUser::class);
+
         $this->commands([
             \Kesify\MicroserviceSkeleton\Console\Commands\AddEnvVariables::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\MigrateOrganization::class,

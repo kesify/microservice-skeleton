@@ -17,6 +17,7 @@
     "illuminate/config": "^11.39",
     "illuminate/filesystem": "^11.39",
     "illuminate/database": "^11.39",
+    "illuminate/auth": "^11.39",
     "spatie/laravel-permission": "^6.4",
     "ext-json": "*"
   },

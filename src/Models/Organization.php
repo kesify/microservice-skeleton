@@ -2,8 +2,11 @@
 
 namespace Kesify\MicroserviceSkeleton\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Kesify\MicroserviceSkeleton\Models\FileStorage;
 use Kesify\MicroserviceSkeleton\Traits\UUID;
 use Kesify\MicroserviceSkeleton\Models\OrganizationAddress;
@@ -50,15 +53,15 @@ class Organization extends Model
 
     public function getIsUserInOrganizationAttribute()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (!$user) {
             return false;
         }
 
-        return cache()->remember(
+        return Cache::remember(
             'is_user_in_organization:' . $this->id . ':' . $user->id,
-            now()->addMinutes(10),
+            Carbon::now()->addMinutes(10),
             function () use ($user) {
                 return OrganizationUser::where([
                     'organization_id' => $this->id,
