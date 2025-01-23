@@ -77,7 +77,8 @@ class Organization extends Model
         return $db?->db_name;
     }
 
-    public function database(){
+    public function database(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(OrganizationDatabase::class, 'id', 'organization_id');
     }
 
@@ -87,26 +88,27 @@ class Organization extends Model
         return $addresses;
     }
 
-    public function addresses(){
+    public function addresses(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(OrganizationAddress::class, 'id', 'organization_id');
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(OrganizationUser::class, 'id', 'organization_id');
     }
 
-    public function users()
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(OrganizationUser::class, 'organization_id', 'id');
     }
 
-    public function fileStorageDark()
+    public function fileStorageDark(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(FileStorage::class, 'logo_dark_id');
     }
 
-    public function fileStorageLight()
+    public function fileStorageLight(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(FileStorage::class, 'logo_light_id');
     }
