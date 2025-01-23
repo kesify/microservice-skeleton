@@ -12,13 +12,13 @@
   ],
   "require": {
     "php": "^8.4",
-    "illuminate/support": "^11.39.1",
-    "illuminate/routing": "^11.39.1",
+    "illuminate/support": "^11.39",
+    "illuminate/routing": "^11.39",
     "illuminate/config": "^11.39",
-    "spatie/laravel-permission": "^6.4",
-    "ext-json": "*",
     "illuminate/filesystem": "^11.39",
-    "illuminate/database": "^11.39"
+    "illuminate/database": "^11.39",
+    "spatie/laravel-permission": "^6.4",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
