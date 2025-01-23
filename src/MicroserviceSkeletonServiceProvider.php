@@ -18,6 +18,9 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     {
         $this->commands([
             \Kesify\MicroserviceSkeleton\Console\Commands\AddEnvVariables::class,
+            \Kesify\MicroserviceSkeleton\Console\Commands\MigrateOrganization::class,
+            \Kesify\MicroserviceSkeleton\Console\Commands\RollbackOrganization::class,
+            \Kesify\MicroserviceSkeleton\Console\Commands\SeedOrganization::class,
         ]);
     }
 

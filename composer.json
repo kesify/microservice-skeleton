@@ -17,7 +17,8 @@
     "illuminate/config": "^11.39.1",
     "spatie/laravel-permission": "^6.4",
     "ext-json": "*",
-    "illuminate/filesystem": "^11.39"
+    "illuminate/filesystem": "^11.39",
+    "illuminate/database": "^11.39"
   },
   "autoload": {
     "psr-4": {
