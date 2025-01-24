@@ -76,7 +76,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
 
     protected function addDatabaseConnection(): void
     {
+        Config::set('database.connections.main', Config::get('microservice.main_connection'));
         Config::set('database.connections.organization', Config::get('microservice.organization_connection'));
-        Config::set('database.connections.main', Config::get('microservice.mainconnection'));
     }
 }
