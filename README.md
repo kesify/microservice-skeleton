@@ -39,7 +39,7 @@
 3. **Optional: Publish the configuration files and migrations:**
 
    ```bash
-   php artisan vendor:publish --tag=microservice-skeleton-config
+   php artisan vendor:publish --tag=microservice-skeleton
    ```
 
 ---

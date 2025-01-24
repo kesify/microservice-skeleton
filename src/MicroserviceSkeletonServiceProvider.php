@@ -53,7 +53,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
             __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
-        ], 'microservice-skeleton-config');
+        ], 'microservice-skeleton');
 
         // Middleware registrieren
         $this->registerMiddleware();
