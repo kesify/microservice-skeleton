@@ -6,6 +6,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
+use Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse;
+use Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
 use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
@@ -45,11 +47,12 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
 
         $this->publishes([
             __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
+            __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
         ], 'microservice-skeleton-config');
 
         // Middleware registrieren
@@ -66,7 +69,9 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
         $router = $this->app->make(Router::class);
 
         // Middleware alias hinzufügen
-        $router->aliasMiddleware('setOrganization', SetOrganization::class);
+        $router->aliasMiddleware('SetOrganization', SetOrganization::class);
+        $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
+        $router->aliasMiddleware('JsonResponse', JsonResponse::class);
     }
 
     protected function addDatabaseConnection(): void
