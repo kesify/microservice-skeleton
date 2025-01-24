@@ -20,7 +20,8 @@
     "illuminate/auth": "^11.39",
     "spatie/laravel-permission": "^6.4",
     "ext-json": "*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-fileinfo": "*"
   },
   "autoload": {
     "psr-4": {

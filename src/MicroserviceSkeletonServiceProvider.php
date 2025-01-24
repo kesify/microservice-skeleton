@@ -11,6 +11,8 @@ use Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
 use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
+use Kesify\MicroserviceSkeleton\Services\FileStorageService;
+use Kesify\MicroserviceSkeleton\Services\KeyService;
 use Kesify\MicroserviceSkeleton\Services\OrganizationService;
 
 class MicroserviceSkeletonServiceProvider extends ServiceProvider
@@ -20,13 +22,21 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind('Organization', Organization::class);
         $this->app->bind('OrganizationUser', OrganizationUser::class);
 
         $this->app->singleton('OrganizationService', function () {
             return new OrganizationService();
+        });
+
+        $this->app->singleton('FileStorageService', function () {
+            return new FileStorageService();
+        });
+
+        $this->app->singleton('KeyService', function () {
+            return new KeyService();
         });
 
         $this->commands([
@@ -49,14 +59,12 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         $this->publishes([
             __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
+            __DIR__ . '/Config/filestorage.php' => $this->app->configPath('filestorage.php'),
             __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
         ], 'microservice-skeleton');
 
-        // Middleware registrieren
-        $this->registerMiddleware();
         $this->addDatabaseConnection();
     }
 
@@ -67,8 +75,6 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     protected function registerMiddleware(): void
     {
         $router = $this->app->make(Router::class);
-
-        // Middleware alias hinzufügen
         $router->aliasMiddleware('SetOrganization', SetOrganization::class);
         $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
         $router->aliasMiddleware('JsonResponse', JsonResponse::class);
