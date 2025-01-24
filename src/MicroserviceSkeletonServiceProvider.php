@@ -9,6 +9,7 @@ use Illuminate\Routing\Router;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
 use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
+use Kesify\MicroserviceSkeleton\Services\OrganizationService;
 
 class MicroserviceSkeletonServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,10 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     {
         $this->app->bind('Organization', Organization::class);
         $this->app->bind('OrganizationUser', OrganizationUser::class);
+
+        $this->app->singleton('OrganizationService', function () {
+            return new OrganizationService();
+        });
 
         $this->commands([
             \Kesify\MicroserviceSkeleton\Console\Commands\AddEnvVariables::class,

@@ -24,7 +24,10 @@
   "autoload": {
     "psr-4": {
       "Kesify\\MicroserviceSkeleton\\": "src/"
-    }
+    },
+    "files": [
+      "src/Helpers/helpers.php"
+    ]
   },
   "extra": {
     "laravel": {

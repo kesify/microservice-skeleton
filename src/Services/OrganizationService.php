@@ -11,7 +11,7 @@ use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 
 class OrganizationService
 {
-    public function getOrganization($organizationId = null)
+    public function getOrganization(string $organizationId)
     {
         if($organizationId){
             return Organization::findOrFail($organizationId);
@@ -19,7 +19,7 @@ class OrganizationService
         return null;
     }
 
-    public function setOrganizationDatabase($db): ?true
+    public function setOrganizationDatabase(string $db): ?true
     {
         if($db){
             Config::set(['database.connections.organization.database' => $db]);
@@ -48,7 +48,7 @@ class OrganizationService
         }
     }
 
-    public function migrateOrganizationByOrganizationId($organizationId = null): ?int
+    public function migrateOrganizationByOrganizationId(string $organizationId): ?int
     {
         if($organizationId){
             $organization = $this->getOrganization($organizationId);
@@ -62,7 +62,7 @@ class OrganizationService
         return null;
     }
 
-    public function migrateOrganizationByDatabase($database = null): ?int
+    public function migrateOrganizationByDatabase(string $database): ?int
     {
         if($database){
             $this->setOrganizationDatabase($database);
@@ -74,7 +74,7 @@ class OrganizationService
         return null;
     }
 
-    public function seedOrganizationByOrganizationId($organizationId = null): ?int
+    public function seedOrganizationByOrganizationId(string $organizationId): ?int
     {
         if($organizationId && class_exists('Database\Seeders\OrganizationDatabaseSeeder')){
             $organization = $this->getOrganization($organizationId);
@@ -86,7 +86,7 @@ class OrganizationService
         return null;
     }
 
-    public function seedOrganizationByDatabase($database = null): ?int
+    public function seedOrganizationByDatabase(string $database): ?int
     {
         if($database && class_exists('Database\Seeders\OrganizationDatabaseSeeder')){
             $this->setOrganizationDatabase($database);
@@ -97,7 +97,7 @@ class OrganizationService
         return null;
     }
 
-    public function switchOrganization($organizationId = null): ?array
+    public function switchOrganization(string $organizationId): ?array
     {
         $token = Config::get('session.token');
         $organization = $this->getOrganization($organizationId);
