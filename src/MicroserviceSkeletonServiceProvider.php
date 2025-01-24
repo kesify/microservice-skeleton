@@ -24,6 +24,30 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->bindServices();
+        $this->registerCommands();
+        $this->mergeConfig();
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot(): void
+    {
+        $this->publishAssets();
+        $this->addDatabaseConnection();
+        //$this->registerMiddleware();
+    }
+
+    /**
+     * Bind services into the container.
+     *
+     * @return void
+     */
+    protected function bindServices(): void
+    {
         $this->app->bind('Organization', Organization::class);
         $this->app->bind('OrganizationUser', OrganizationUser::class);
 
@@ -38,51 +62,70 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
         $this->app->singleton('KeyService', function () {
             return new KeyService();
         });
+    }
 
+    /**
+     * Register artisan commands.
+     *
+     * @return void
+     */
+    protected function registerCommands(): void
+    {
         $this->commands([
             \Kesify\MicroserviceSkeleton\Console\Commands\AddEnvVariables::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\MigrateOrganization::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\RollbackOrganization::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\SeedOrganization::class,
         ]);
-
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/microservice.php',
-            'microservice'
-        );
     }
 
     /**
-     * Bootstrap any application services.
+     * Merge package configuration files.
      *
      * @return void
      */
-    public function boot(): void
+    protected function mergeConfig(): void
+    {
+        $this->mergeConfigFrom(__DIR__ . '/Config/microservice.php', 'microservice');
+    }
+
+    /**
+     * Publish configuration files and routes.
+     *
+     * @return void
+     */
+    protected function publishAssets(): void
     {
         $this->publishes([
             __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
             __DIR__ . '/Config/filestorage.php' => $this->app->configPath('filestorage.php'),
             __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
         ], 'microservice-skeleton');
-
-        $this->addDatabaseConnection();
     }
 
     /**
-     * Register middleware for the package.
-     * @throws BindingResolutionException
+     * Add custom database connections.
+     *
+     * @return void
      */
-    protected function registerMiddleware(): void
-    {
-        $router = $this->app->make(Router::class);
-        $router->aliasMiddleware('SetOrganization', SetOrganization::class);
-        $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
-        $router->aliasMiddleware('JsonResponse', JsonResponse::class);
-    }
-
     protected function addDatabaseConnection(): void
     {
         Config::set('database.connections.main', Config::get('microservice.main_connection'));
         Config::set('database.connections.organization', Config::get('microservice.organization_connection'));
+    }
+
+    /**
+     * Register middleware for the package.
+     *
+     * @throws BindingResolutionException
+     * @return void
+     */
+    protected function registerMiddleware(): void
+    {
+        $router = $this->app->make(Router::class);
+
+        $router->aliasMiddleware('SetOrganization', SetOrganization::class);
+        $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
+        $router->aliasMiddleware('JsonResponse', JsonResponse::class);
     }
 }
