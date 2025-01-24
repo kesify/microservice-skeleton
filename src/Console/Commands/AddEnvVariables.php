@@ -12,7 +12,7 @@ class AddEnvVariables extends Command
      *
      * @var string
      */
-    protected $signature = 'ms:add-env-variables';
+    protected $signature = 'ms:add-env';
 
     protected $description = 'Add required environment variables to the .env file';
 

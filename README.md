@@ -1,14 +1,14 @@
 # microservice-skeleton
 
-**microservice-skeleton** ist ein Laravel-Package, das die Verwaltung von Organisationen und Benutzern erleichtert, indem es hilfreiche Modelle, Attribute und Caching-Mechanismen bereitstellt.
+**microservice-skeleton** is a Laravel package designed to simplify the management of organizations and users by providing helpful models, attributes, and caching mechanisms.
 
 ---
 
-## Anforderungen
+## Requirements
 
 - **PHP:** ^8.4
 - **Laravel:** ^11
-- **Abhängigkeiten:**
+- **Dependencies:**
     - illuminate/support
     - illuminate/auth
     - illuminate/cache
@@ -17,42 +17,9 @@
 
 ## Installation
 
-1. **Installiere das Package über Composer:**
+1. **Add the package as a local repository:**
 
-   ```bash
-   composer require kesify/microservice-skeleton
-   ```
-
-2. **Optional: Veröffentliche die Konfigurationsdateien und Migrationen:**
-
-   ```bash
-   php artisan vendor:publish --tag=microservice-skeleton-config
-   ```
----
-
-## Tests
-
-1. **Installiere die Entwicklungsabhängigkeiten:**
-
-   ```bash
-   composer install --dev
-   ```
-
-2. **Führe die Tests mit PHPUnit aus:**
-
-   ```bash
-   ./vendor/bin/phpunit
-   ```
-
----
-
-## Entwicklung
-
-Wenn du das Package lokal testen möchtest, kannst du es in einem Laravel-Projekt verwenden:
-
-1. **Füge das Package als lokales Repository hinzu:**
-
-   In der `composer.json` deines Laravel-Projekts:
+   In the `composer.json` of your Laravel project:
 
    ```json
    "repositories": [
@@ -63,14 +30,66 @@ Wenn du das Package lokal testen möchtest, kannst du es in einem Laravel-Projek
    ]
    ```
 
-2. **Installiere das Package:**
+2. **Install the package via Composer:**
 
    ```bash
    composer require kesify/microservice-skeleton
    ```
 
+3. **Optional: Publish the configuration files and migrations:**
+
+   ```bash
+   php artisan vendor:publish --tag=microservice-skeleton-config
+   ```
+
 ---
 
-## Lizenz
+## Commands
 
-Dieses Package ist unter der [MIT-Lizenz](LICENSE) lizenziert.
+The command namespace is `ms` and `organization`.
+
+To add environment variables:
+
+```bash
+php artisan ms:add-env
+```
+
+To run organization migrations:
+
+```bash
+php artisan organization:migrate
+```
+
+To rollback organization migrations:
+
+```bash
+php artisan organization:rollback
+```
+
+To seed organization data:
+
+```bash
+php artisan organization:seed
+```
+
+---
+
+## Tests
+
+1. **Install development dependencies:**
+
+   ```bash
+   composer install --dev
+   ```
+
+2. **Run tests with PHPUnit:**
+
+   ```bash
+   ./vendor/bin/phpunit
+   ```
+
+---
+
+## License
+
+This package is licensed under the [MIT License](LICENSE).
