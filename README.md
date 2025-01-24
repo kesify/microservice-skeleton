@@ -1,6 +1,6 @@
-# microservice-skeleton
+# Microservice Skeleton
 
-**microservice-skeleton** is a Laravel package designed to simplify the management of organizations and users by providing helpful models, attributes, and caching mechanisms.
+**Microservice Skeleton** is a Laravel package designed to simplify the management of organizations and users by providing helpful models, attributes, and caching mechanisms.
 
 ---
 
@@ -44,33 +44,56 @@
 
 ---
 
+## Setup
+
+1. **Update Environment Variables:**
+   Configure the database and Redis environment variables in your `.env` file.
+
+2. **Remove `web.php` Routing:**
+   Replace the web routing in `/bootstrap/app.php` with API routing:
+
+   ```php
+   api: __DIR__.'/../routes/api.php',
+   ```
+
+3. **Add Middleware in `/bootstrap/app.php`:**
+   Append the following middleware classes:
+
+   ```php
+   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse::class);
+   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware::class);
+   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization::class);
+   ```
+
+---
+
 ## Commands
 
 The command namespace is `ms` and `organization`.
 
-To add environment variables:
+- **Add environment variables:**
 
-```bash
-php artisan ms:add-env
-```
+   ```bash
+   php artisan ms:add-env
+   ```
 
-To run organization migrations:
+- **Run organization migrations:**
 
-```bash
-php artisan organization:migrate
-```
+   ```bash
+   php artisan organization:migrate
+   ```
 
-To rollback organization migrations:
+- **Rollback organization migrations:**
 
-```bash
-php artisan organization:rollback
-```
+   ```bash
+   php artisan organization:rollback
+   ```
 
-To seed organization data:
+- **Seed organization data:**
 
-```bash
-php artisan organization:seed
-```
+   ```bash
+   php artisan organization:seed
+   ```
 
 ---
 

@@ -23,7 +23,7 @@ class AddEnvVariables extends Command
 
         // Definiere die Variablen, die hinzugefügt werden sollen
         $variables = [
-            'ORGANIZATION_DB_HOST' => '127.0.0.1',
+            'ORGANIZATION_DB_HOST' => 'db',
             'ORGANIZATION_DB_PORT' => '3306',
             'ORGANIZATION_DB_NAME' => 'organization_db',
             'ORGANIZATION_DB_USERNAME' => 'root',
