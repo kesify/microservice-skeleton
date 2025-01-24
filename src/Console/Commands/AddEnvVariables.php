@@ -12,14 +12,14 @@ class AddEnvVariables extends Command
      *
      * @var string
      */
-    protected $signature = 'kesify:add-env-variables';
+    protected $signature = 'ms:add-env-variables';
 
     protected $description = 'Add required environment variables to the .env file';
 
     public function handle(): void
     {
-        $envPath = dirname(__DIR__, 3) . '/.env';
-        $envExamplePath = dirname(__DIR__, 3) . '/.env.example';
+        $envPath = dirname(__DIR__, 6) . '/.env';
+        $envExamplePath = dirname(__DIR__, 6) . '/.env.example';
 
         // Definiere die Variablen, die hinzugefügt werden sollen
         $variables = [
@@ -31,16 +31,24 @@ class AddEnvVariables extends Command
         ];
 
         // Füge die Variablen zur .env hinzu
-        foreach ($variables as $key => $value) {
-            $this->addToEnvFile($key, $value, $envPath);
+        if(file_exists($envExamplePath)){
+            foreach ($variables as $key => $value) {
+                $this->addToEnvFile($key, $value, $envPath);
+            }
+            $this->info('Environment variables have been added to .env.');
+        }else{
+           $this->error('.env file does not exist.');
         }
 
         // Optional: Füge die Variablen zur .env.example hinzu
-        foreach ($variables as $key => $value) {
-            $this->addToEnvFile($key, $value, $envExamplePath);
+        if(file_exists($envExamplePath)){
+            foreach ($variables as $key => $value) {
+                $this->addToEnvFile($key, $value, $envExamplePath);
+            }
+            $this->info('Environment variables have been added to .env.example.');
+        }else{
+            $this->warn('.env-example file does not exist.');
         }
-
-        $this->info('Environment variables have been added to .env and .env.example.');
     }
 
     private function addToEnvFile($key, $value, $path): void
