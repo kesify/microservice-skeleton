@@ -26,6 +26,7 @@ class SetOrganization
             $token = str_replace("Bearer ",'',$authorization);
             Config::set('session.token', $token);
 
+            var_dump($token);
             $organization = json_decode(Redis::get('at_'.$token.'_organization'),true);
             dd($organization);
             if ($organization) {
