@@ -38,6 +38,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     {
         $this->publishAssets();
         $this->addDatabaseConnection();
+        $this->addFilesystemDisks();
         //$this->registerMiddleware();
     }
 
@@ -110,9 +111,22 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      */
     protected function addDatabaseConnection(): void
     {
-        Config::set('database.connections.main', Config::get('microservice.main_connection'));
-        Config::set('database.connections.organization', Config::get('microservice.organization_connection'));
+        Config::set('database.connections.main', Config::get('microservice.database.connections.main'));
+        Config::set('database.connections.organization', Config::get('microservice.database.connections.organization'));
     }
+
+
+    /**
+     * Add custom filesystem0 disks.
+     *
+     * @return void
+     */
+    protected function addFilesystemDisks(): void
+    {
+        Config::set('filesystems.disks.s3-private', Config::get('microservice.filesystems.disks.s3-private'));
+        Config::set('filesystems.disks.s3-public', Config::get('microservice.filesystems.disks.s3-public'));
+    }
+
 
     /**
      * Register middleware for the package.

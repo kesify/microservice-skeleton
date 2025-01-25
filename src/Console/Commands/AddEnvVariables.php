@@ -28,6 +28,8 @@ class AddEnvVariables extends Command
             'ORGANIZATION_DB_NAME' => 'organization_db',
             'ORGANIZATION_DB_USERNAME' => 'root',
             'ORGANIZATION_DB_PASSWORD' => '',
+            'AWS_BUCKET_PRIVATE' => '',
+            'AWS_BUCKET_PUBLIC' => '',
         ];
 
         // Füge die Variablen zur .env hinzu
