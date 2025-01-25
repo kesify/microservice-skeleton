@@ -27,6 +27,7 @@ class SetOrganization
             Config::set('session.token', $token);
 
             $organization = json_decode(Redis::get('at_'.$token.'_organization'),true);
+            dd($organization);
             if ($organization) {
                 App::instance('organization', $organization);
                 (new OrganizationService())->setOrganizationDatabase($organization['database']);
