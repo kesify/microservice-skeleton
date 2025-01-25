@@ -48,6 +48,10 @@
 
 1. **Update Environment Variables:**
    Configure the database and Redis environment variables in your `.env` file.
+   ```dotenv
+   SESSION_DRIVER=redis
+   CACHE_STORE=redis
+   ```
 
 2. **Remove `web.php` Routing:**
    Replace the web routing in `/bootstrap/app.php` with API routing:
