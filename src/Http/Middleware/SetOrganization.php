@@ -26,13 +26,13 @@ class SetOrganization
             $token = str_replace("Bearer ",'',$authorization);
             Config::set('session.token', $token);
 
-            var_dump('at_'.$token.'_organization');
-            $organization = json_decode(Redis::get('at_'.$token.'_organization'),true);
-            dd($organization);
-            if ($organization) {
+            $organizationUserRelation = json_decode(Redis::get('at_'.$token.'_organization'),true);
+            if ($organizationUserRelation) {
+                $organization = OrganizationService()->getOrganization($organizationUserRelation['organization_id']);
+                OrganizationService()->setOrganizationDatabase($organizationUserRelation['database']);
+                App::instance('organizationUserRelation', $organizationUserRelation);
                 App::instance('organization', $organization);
-                (new OrganizationService())->setOrganizationDatabase($organization['database']);
-                setPermissionsTeamId($organization['organization_id']);
+                setPermissionsTeamId($organization->id);
             }
         }
 

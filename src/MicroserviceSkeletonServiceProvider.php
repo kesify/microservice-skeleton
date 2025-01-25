@@ -9,6 +9,7 @@ use Illuminate\Routing\Router;
 use Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse;
 use Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
+use Kesify\MicroserviceSkeleton\Http\Middleware\CheckTokenValidity;
 use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 use Kesify\MicroserviceSkeleton\Services\FileStorageService;
@@ -138,6 +139,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     {
         $router = $this->app->make(Router::class);
 
+        $router->aliasMiddleware('CheckTokenValidity', CheckTokenValidity::class);
         $router->aliasMiddleware('SetOrganization', SetOrganization::class);
         $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
         $router->aliasMiddleware('JsonResponse', JsonResponse::class);

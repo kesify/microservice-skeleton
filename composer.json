@@ -21,7 +21,8 @@
     "spatie/laravel-permission": "^6.4",
     "ext-json": "*",
     "ext-pdo": "*",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "laravel/passport": "^12.4"
   },
   "autoload": {
     "psr-4": {

@@ -49,8 +49,29 @@
 1. **Update Environment Variables:**
    Configure the database and Redis environment variables in your `.env` file.
    ```dotenv
+   APP_NAME=kesify
+   APP_URL=http://kesify.local
+   APP_DOMAIN=kesify.local
+   APP_FRONTEND_ORIGIN=http://app.kesify.local
+   APP_PORT=8101
+   APP_LOCALE=en
+   APP_FALLBACK_LOCALE=en
+   APP_FAKER_LOCALE=en_US
+   
    SESSION_DRIVER=redis
    CACHE_STORE=redis
+   
+   REDIS_CLIENT=phpredis
+   REDIS_HOST=redis
+   REDIS_PASSWORD=null
+   REDIS_PORT=6379
+   
+   AWS_ACCESS_KEY_ID=
+   AWS_SECRET_ACCESS_KEY=
+   AWS_DEFAULT_REGION=eu-central-1
+   AWS_BUCKET_PUBLIC=kesify-app-public
+   AWS_BUCKET_PRIVATE=kesify-app-private
+   AWS_USE_PATH_STYLE_ENDPOINT=false
    ```
 
 2. **Remove `web.php` Routing:**
@@ -64,6 +85,7 @@
    Append the following middleware classes:
 
    ```php
+   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\CheckTokenValidity::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization::class);
