@@ -72,6 +72,10 @@
    AWS_BUCKET_PUBLIC=kesify-app-public
    AWS_BUCKET_PRIVATE=kesify-app-private
    AWS_USE_PATH_STYLE_ENDPOINT=false
+   
+   PASSPORT_PERSONAL_ACCESS_CLIENT_NAME="kesify"
+   PASSPORT_PERSONAL_ACCESS_CLIENT_ID=""
+   PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=""
    ```
 
 2. **Remove `web.php` Routing:**
@@ -85,11 +89,23 @@
    Append the following middleware classes:
 
    ```php
-   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\CheckTokenValidity::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse::class);
+   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\CheckTokenValidity::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization::class);
    ```
+4. **Add in `/config/auth.php` `api`-Guard:**
+
+   ```php
+   'guards' => [
+       'api' => [
+           'driver' => 'passport',
+           'provider' => 'users',
+       ]
+   ]
+   ```
+   
+
 
 ---
 

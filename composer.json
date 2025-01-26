@@ -17,12 +17,13 @@
     "illuminate/config": "^11.39",
     "illuminate/filesystem": "^11.39",
     "illuminate/database": "^11.39",
-    "illuminate/auth": "^11.39",
+    "illuminate/auth": "^11.40",
     "spatie/laravel-permission": "^6.4",
     "ext-json": "*",
     "ext-pdo": "*",
     "ext-fileinfo": "*",
-    "laravel/passport": "^12.4"
+    "laravel/passport": "^12.4",
+    "illuminate/notifications": "^11.40"
   },
   "autoload": {
     "psr-4": {
