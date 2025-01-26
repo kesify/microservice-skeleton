@@ -3,6 +3,7 @@
 namespace Kesify\MicroserviceSkeleton\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -18,6 +19,7 @@ class SetOrganization
      * @param Request $request
      * @param Closure $next
      * @return Response
+     * @throws BindingResolutionException
      */
     public function handle(Request $request, Closure $next): Response
     {

@@ -14,15 +14,11 @@ class OrganizationService
 {
     public function getOrganization(?string $organizationId = null): ?Organization
     {
-        $organization = App::get('organization') ?? null;
-
         if($organizationId){
             return Organization::findOrFail($organizationId);
-        }else if(!$organization){
-            return $organization;
         }
 
-        return null;
+        return App::get('organization') ?? null;
     }
 
     public function setOrganizationDatabase(string $db): ?true
