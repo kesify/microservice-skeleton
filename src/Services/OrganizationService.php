@@ -2,6 +2,7 @@
 
 namespace Kesify\MicroserviceSkeleton\Services;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +12,16 @@ use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 
 class OrganizationService
 {
-    public function getOrganization(string $organizationId)
+    public function getOrganization(?string $organizationId = null): ?Organization
     {
+        $organization = App::get('organization') ?? null;
+
         if($organizationId){
             return Organization::findOrFail($organizationId);
+        }else if(!$organization){
+            return $organization;
         }
+
         return null;
     }
 

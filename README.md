@@ -104,6 +104,16 @@
        ]
    ]
    ```
+5. **Change in `/config/auth.php` `users` Provider:**
+
+   ```php
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', \Kesify\MicroserviceSkeleton\Models\User::class),
+        ],
+    ],
+   ```
    
 
 
