@@ -139,7 +139,6 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     {
         $router = $this->app->make(Router::class);
 
-        $router->aliasMiddleware('CheckTokenValidity', CheckTokenValidity::class);
         $router->aliasMiddleware('SetOrganization', SetOrganization::class);
         $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
         $router->aliasMiddleware('JsonResponse', JsonResponse::class);

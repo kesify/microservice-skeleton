@@ -90,7 +90,6 @@
 
    ```php
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse::class);
-   $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\CheckTokenValidity::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware::class);
    $middleware->append(Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization::class);
    ```
