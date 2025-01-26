@@ -74,7 +74,6 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            \Kesify\MicroserviceSkeleton\Console\Commands\AddEnvVariables::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\MigrateOrganization::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\RollbackOrganization::class,
             \Kesify\MicroserviceSkeleton\Console\Commands\SeedOrganization::class,
@@ -102,6 +101,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
             __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
             __DIR__ . '/Config/filestorage.php' => $this->app->configPath('filestorage.php'),
             __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
+            __DIR__ . '/.env.microservice-example' => $this->app->basePath('.env.microservice-example'),
         ], 'microservice-skeleton');
     }
 

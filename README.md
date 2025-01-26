@@ -47,36 +47,7 @@
 ## Setup
 
 1. **Update Environment Variables:**
-   Configure the database and Redis environment variables in your `.env` file.
-   ```dotenv
-   APP_NAME=kesify
-   APP_URL=http://kesify.local
-   APP_DOMAIN=kesify.local
-   APP_FRONTEND_ORIGIN=http://app.kesify.local
-   APP_PORT=8101
-   APP_LOCALE=en
-   APP_FALLBACK_LOCALE=en
-   APP_FAKER_LOCALE=en_US
-   
-   SESSION_DRIVER=redis
-   CACHE_STORE=redis
-   
-   REDIS_CLIENT=phpredis
-   REDIS_HOST=redis
-   REDIS_PASSWORD=null
-   REDIS_PORT=6379
-   
-   AWS_ACCESS_KEY_ID=
-   AWS_SECRET_ACCESS_KEY=
-   AWS_DEFAULT_REGION=eu-central-1
-   AWS_BUCKET_PUBLIC=kesify-app-public
-   AWS_BUCKET_PRIVATE=kesify-app-private
-   AWS_USE_PATH_STYLE_ENDPOINT=false
-   
-   PASSPORT_PERSONAL_ACCESS_CLIENT_NAME="kesify"
-   PASSPORT_PERSONAL_ACCESS_CLIENT_ID=""
-   PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=""
-   ```
+   Copy `.env.microservice-example` and configure the database and Redis environment variables in your `.env` file.
 
 2. **Remove `web.php` Routing:**
    Replace the web routing in `/bootstrap/app.php` with API routing:
@@ -113,8 +84,7 @@
         ],
     ],
    ```
-   
-
+6. **Copy in `/storage` folder oauth public and private key from gateway**
 
 ---
 
