@@ -19,6 +19,7 @@ class Microservice extends Model
         'host',
         'ssl',
         'port',
+        'path',
         'key',
         'secret',
         'active',
@@ -30,4 +31,13 @@ class Microservice extends Model
         'active' => 'boolean',
         'online' => 'boolean',
     ];
+
+    protected $appends = ['url'];
+
+    public function getUrlAttribute(): string
+    {
+        $port = !empty($this->port) ? ':'.$this->port:'';
+        return $this->host.$port.$this->path;
+    }
+
 }

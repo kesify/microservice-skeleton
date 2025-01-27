@@ -13,6 +13,7 @@ return new class extends Migration
         Microservice::create([
             'name' => 'example',
             'host' => 'host',
+            'path' => '/api',
             'ssl' => false,
             'active' => true,
         ]);
