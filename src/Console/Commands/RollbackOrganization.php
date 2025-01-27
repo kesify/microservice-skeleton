@@ -34,7 +34,8 @@ class RollbackOrganization extends Command
     {
         try {
             $organizationService->setOrganizationDatabase($databaseName);
-            $options = ['--database' => 'organization'];
+            $path = '/database/migrations/organization';
+            $options = ['--path' => $path,'--database' => 'organization'];
             if (!is_null($batch)) {
                 $options['--step'] = $batch;
             }
@@ -54,12 +55,13 @@ class RollbackOrganization extends Command
         }
 
         $organizations = $query->get();
+        $path = '/database/migrations/organization';
 
         foreach ($organizations as $organization) {
             try {
                 $this->info('Rolling back migrations for Organization ID: ' . $organization->id . ' Database: ' . $organization->database);
                 $organizationService->setOrganizationDatabase($organization->database);
-                $options = ['--database' => 'organization'];
+                $options = ['--path' => $path,'--database' => 'organization'];
                 if (!is_null($batch)) {
                     $options['--step'] = $batch;
                 }

@@ -1,6 +1,5 @@
 {
   "name": "kesify/microservice-skeleton",
-  "version": "0.1.0",
   "description": "A reusable skeleton package for Laravel microservices.",
   "type": "library",
   "license": "MIT",
