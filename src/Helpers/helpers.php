@@ -54,3 +54,20 @@ if (!function_exists('KeyService')) {
         }
     }
 }
+
+if (!function_exists('NumberRangesService')) {
+    /**
+     * Get the NumberRangesService instance from the container.
+     *
+     * @return \Kesify\MicroserviceSkeleton\Services\NumberRangesService
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    function NumberRangesService(): mixed
+    {
+        try {
+            return Container::getInstance()->make('NumberRangesService');
+        } catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
+            throw $e;
+        }
+    }
+}

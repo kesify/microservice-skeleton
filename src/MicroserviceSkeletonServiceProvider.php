@@ -14,6 +14,7 @@ use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 use Kesify\MicroserviceSkeleton\Services\FileStorageService;
 use Kesify\MicroserviceSkeleton\Services\KeyService;
+use Kesify\MicroserviceSkeleton\Services\NumberRangesService;
 use Kesify\MicroserviceSkeleton\Services\OrganizationService;
 
 class MicroserviceSkeletonServiceProvider extends ServiceProvider
@@ -63,6 +64,10 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
 
         $this->app->singleton('KeyService', function () {
             return new KeyService();
+        });
+
+        $this->app->singleton('NumberRangesService', function () {
+            return new NumberRangesService();
         });
     }
 
