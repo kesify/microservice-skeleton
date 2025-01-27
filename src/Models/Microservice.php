@@ -36,8 +36,9 @@ class Microservice extends Model
 
     public function getUrlAttribute(): string
     {
+        $ssl = $this->ssl ? 'https://' : 'http://';
         $port = !empty($this->port) ? ':'.$this->port:'';
-        return $this->host.$port.$this->path;
+        return $ssl.$this->host.$port.$this->path;
     }
 
 }
