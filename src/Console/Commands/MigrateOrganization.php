@@ -80,9 +80,9 @@ class MigrateOrganization extends Command
             '--path' => $path,
             '--database' => 'organization',
         ]);
+        $output = Artisan::output();
 
         if ($showOutput) {
-            $output = Artisan::output();
             $this->line("Artisan Output:\n" . $output);
         }
 
