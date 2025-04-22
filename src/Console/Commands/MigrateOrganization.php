@@ -77,6 +77,7 @@ class MigrateOrganization extends Command
             '--path' => $path,
             '--database' => 'organization',
         ]);
+        $output = Artisan::output();
 
         $message = $isRollback
             ? "Rollback completed"
@@ -87,5 +88,7 @@ class MigrateOrganization extends Command
         } else {
             $this->info("{$message} for Database: {$databaseName}.");
         }
+
+        $this->line("Output:\n" . $output);
     }
 }
