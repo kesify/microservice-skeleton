@@ -38,7 +38,11 @@ class FileStorageService
             return null;
         }
 
-        $fillables = $this->getFillables($file, $externFillables);
+        $fillables = $this->getFillables(array_merge([
+            'filename'=> pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+            'extension'=> $file->getClientOriginalExtension(),
+        ], $externFillables));
+
         $path = $this->preparePath($configuration['path'], $fillables);
 
         $stored = $this->storeFile($file, $path, $configuration['disk']);
@@ -110,12 +114,10 @@ class FileStorageService
         }
 
         $fileMetaData = ($this->getFileMetadata($fileId,$fromConfiguration))->toArray();
-        $file = $this->prepareUploadedFile([
-            'name' => $fileMetaData['filename'],
-            'path' => $fileMetaData['path'],
-            'mime' => $fileMetaData['extension'],
-        ]);
-        $fillables = $this->getFillables($file, $externFillables);
+        $fillables = $this->getFillables(array_merge([
+            'filename'=> $fileMetaData['filename'],
+            'extension'=> $fileMetaData['extension'],
+        ], $externFillables));
         $path = $this->preparePath($toConfiguration['path'], $fillables);
         $moved = $this->moveFile($fileId, $fromConfiguration,$toConfiguration['disk'],$path);
         if(!$moved)
@@ -148,10 +150,10 @@ class FileStorageService
         return true;
     }
 
-    private function getFillables($file, $externFillables): array
+    private function getFillables($externFillables): array
     {
-        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
+        $filename = $externFillables['filename'] ?? 'default';
+        $extension = $externFillables['extension'] ?? '';
         $user_id = Auth::id();
         $organization = App::get('organization');
         $generatedFileName = new KeyService()->generateName(16);
