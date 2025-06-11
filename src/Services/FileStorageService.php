@@ -110,7 +110,12 @@ class FileStorageService
         }
 
         $fileMetaData = ($this->getFileMetadata($fileId,$fromConfiguration))->toArray();
-        $fillables = array_merge($fileMetaData,$externFillables);
+        $file = $this->prepareUploadedFile([
+            'name' => $fileMetaData['filename'],
+            'path' => $fileMetaData['path'],
+            'mime' => $fileMetaData['extension'],
+        ]);
+        $fillables = $this->getFillables($file, $externFillables);
         $path = $this->preparePath($toConfiguration['path'], $fillables);
         $moved = $this->moveFile($fileId, $fromConfiguration,$toConfiguration['disk'],$path);
         if(!$moved)
