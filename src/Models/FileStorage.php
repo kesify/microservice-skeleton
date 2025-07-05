@@ -37,7 +37,7 @@ class FileStorage extends Model
         $path = $path ?? $this->path;
         $disk = $disk ?? $this->disk;
         if($path && $disk){
-            return Storage::disk($disk)->url($path);
+            return Storage::disk($disk)->temporaryUrl($path, now()->addMinutes(5));
         }else
             return null;
     }
