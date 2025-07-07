@@ -11,7 +11,7 @@ class Module extends Model
 {
     use HasFactory, UUID;
 
-    protected $connection = 'organization';
+    protected $connection = 'main';
     protected $table = "modules";
 
     protected $fillable = [

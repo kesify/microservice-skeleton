@@ -12,7 +12,7 @@ use Kesify\MicroserviceSkeleton\Traits\UUID;
 class OrganizationModule extends Model
 {
     use HasFactory, UUID;
-    protected $connection = 'organization';
+    protected $connection = 'main';
     protected $table = "organization_modules";
 
     protected $fillable = [
