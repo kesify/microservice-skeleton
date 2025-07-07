@@ -13,7 +13,7 @@ return [
             //'afterUpload' => [\App\Http\Controllers\Controller::class, 'handleUpload'],
         ],
         'module-image'=>[
-            'name'=>'default',
+            'name'=>'module-image',
             'connection'=>'main',
             'disk'=>'s3-public',
             'path'=>'module/{{module_id}}/{{generated_filename}}.{{extension}}',
@@ -23,7 +23,7 @@ return [
             //'afterUpload' => [\App\Http\Controllers\Controller::class, 'handleUpload'],
         ],
         'module-screenshots'=>[
-            'name'=>'default',
+            'name'=>'module-screenshots',
             'connection'=>'main',
             'disk'=>'s3-public',
             'path'=>'module/{{module_id}}/screenshots/{{generated_filename}}.{{extension}}',
