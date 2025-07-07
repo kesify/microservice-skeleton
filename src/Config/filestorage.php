@@ -20,7 +20,6 @@ return [
             'maxSize'=>10000000, //1mb
             'markAsInactive' => false,
             'deleteRestOnSameConfiguration'=>false,
-            //'afterUpload' => [\App\Http\Controllers\Controller::class, 'handleUpload'],
         ],
         'module-screenshots'=>[
             'name'=>'module-screenshots',
@@ -30,7 +29,6 @@ return [
             'maxSize'=>10000000, //1mb
             'markAsInactive' => false,
             'deleteRestOnSameConfiguration'=>false,
-            //'afterUpload' => [\App\Http\Controllers\Controller::class, 'handleUpload'],
         ]
     ]
 ];

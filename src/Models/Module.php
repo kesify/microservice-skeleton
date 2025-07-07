@@ -16,7 +16,7 @@ class Module extends Model
 
     protected $fillable = [
         'key',
-        'name',
+        'label',
         'description',
         'stripe_product_id',
         'metadata',
