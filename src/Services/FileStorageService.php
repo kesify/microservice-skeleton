@@ -22,49 +22,50 @@ class FileStorageService
      * @param array $externFillables
      * @return array|null
      */
-    public function store(array|string|UploadedFile $file, ?string $configurationName = 'default', array $externFillables = []): ?array
+    public function store(array|string|UploadedFile $file, ?string $configurationName = 'default', array $externFillables = []): array
     {
         $file = $this->prepareUploadedFile($file);
         if (!$file) {
-            return null;
+            throw new \RuntimeException('Invalid file or file preparation failed.');
         }
 
         $configuration = $this->getUploadConfig($configurationName);
-        if (!$configuration || !$file) {
-            return null;
+        if (!$configuration) {
+            throw new \RuntimeException("Upload configuration '{$configurationName}' not found.");
         }
 
         if (!$this->validateFile($file, $configuration)) {
-            return null;
+            throw new \RuntimeException('File validation failed.');
         }
 
         $fillables = $this->getFillables(array_merge([
-            'filename'=> pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
-            'extension'=> $file->getClientOriginalExtension(),
+            'filename' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+            'extension' => $file->getClientOriginalExtension(),
         ], $externFillables));
 
         $path = $this->preparePath($configuration['path'], $fillables);
 
         $stored = $this->storeFile($file, $path, $configuration['disk']);
-        if(!$stored)
-            return null;
+        if (!$stored) {
+            throw new \RuntimeException('File could not be stored.');
+        }
 
-
-        $createData = array_merge($fillables,[
-            'size'=>$file->getSize(),
-            'extension'=>$file->getClientOriginalExtension(),
-            'path'=>$path,
+        $createData = array_merge($fillables, [
+            'size' => $file->getSize(),
+            'extension' => $file->getClientOriginalExtension(),
+            'path' => $path,
         ]);
+
         $metaData = $this->saveFileMetadata($createData, $configuration);
         $url = Storage::disk($configuration['disk'])->url($path);
 
-        $returnData = array_merge(
-            $metaData,
-            ['url' => $url]
-        );
+        $returnData = array_merge($metaData, ['url' => $url]);
 
         if (isset($configuration['afterUpload']) && is_callable($configuration['afterUpload'])) {
-            call_user_func($configuration['afterUpload'], array_merge(['upload' => $returnData],['fileData' => $createData]));
+            call_user_func($configuration['afterUpload'], [
+                'upload' => $returnData,
+                'fileData' => $createData,
+            ]);
         }
 
         return $returnData;
