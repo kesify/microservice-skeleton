@@ -35,13 +35,15 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      * @return void
+     * @throws BindingResolutionException
      */
     public function boot(): void
     {
         $this->publishAssets();
         $this->addDatabaseConnection();
         $this->addFilesystemDisks();
-        //$this->registerMiddleware();
+        $this->registerController();
+        $this->registerMiddleware();
     }
 
     /**
@@ -150,5 +152,10 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
         $router->aliasMiddleware('SetOrganization', SetOrganization::class);
         $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
         $router->aliasMiddleware('JsonResponse', JsonResponse::class);
+    }
+
+    protected function registerController(): void
+    {
+        $this->app->make('Kesify\MicroserviceSkeleton\Http\Controllers\MicroserviceController');
     }
 }
