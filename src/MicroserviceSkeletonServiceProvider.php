@@ -108,6 +108,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
             __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
             __DIR__ . '/.env.microservice-example' => $this->app->basePath('.env.microservice-example'),
             __DIR__ . '/migrations/add_microservice.php' => $this->app->basePath('/database/migrations/' . date('Y_m_d_His') . '_add_microservice.php'),
+            __DIR__ . '/migrations/add_module.php' => $this->app->basePath('/database/migrations/' . date('Y_m_d_His') . '_add_module.php'),
             __DIR__ . '/lang' => $this->app->basePath('resources/lang'),
         ], 'microservice-skeleton');
     }
