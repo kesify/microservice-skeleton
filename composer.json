@@ -22,7 +22,8 @@
     "ext-pdo": "*",
     "ext-fileinfo": "*",
     "laravel/passport": "^12.4",
-    "illuminate/notifications": "^11.40"
+    "illuminate/notifications": "^11.40",
+    "league/flysystem-aws-s3-v3": "^3.29"
   },
   "autoload": {
     "psr-4": {
