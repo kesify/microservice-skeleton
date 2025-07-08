@@ -156,17 +156,24 @@ class FileStorageService
         $filename = $externFillables['filename'] ?? 'default';
         $extension = $externFillables['extension'] ?? '';
         $user_id = Auth::id();
-        $organization = App::get('organization');
+        $organization = App::bound('organization') ? App::get('organization') : null;
         $generatedFileName = new KeyService()->generateName(16);
 
-        return array_merge([
+        $array = [
             'filename' => $filename,
             'extension' => $extension,
             'user_id' => $user_id,
             'organization_id' => $organization->id,
             'organization_name' => $organization->name,
             'generated_filename' => $generatedFileName
-        ], $externFillables);
+        ];
+
+        if($organization){
+            $array['organization_id'] = $organization->id;
+            $array['organization_name'] = $organization->name;
+        }
+
+        return array_merge($array, $externFillables);
     }
 
     private function storeFile($file, $path, $disk): bool
