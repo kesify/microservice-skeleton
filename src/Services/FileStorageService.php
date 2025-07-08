@@ -163,8 +163,6 @@ class FileStorageService
             'filename' => $filename,
             'extension' => $extension,
             'user_id' => $user_id,
-            'organization_id' => $organization->id,
-            'organization_name' => $organization->name,
             'generated_filename' => $generatedFileName
         ];
 
