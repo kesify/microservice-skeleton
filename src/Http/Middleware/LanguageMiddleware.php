@@ -4,7 +4,7 @@ namespace Kesify\MicroserviceSkeleton\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\App;
-use function App\Http\Middleware\config;
+use Illuminate\Support\Facades\Config;
 
 class LanguageMiddleware
 {
@@ -21,9 +21,9 @@ class LanguageMiddleware
 
         $locale = substr($localeHeader, 0, 2);
 
-        $availableLocales = ['en', 'de'];
+        $availableLocales = ['en', 'de', 'tr'];
         if (! in_array($locale, $availableLocales)) {
-            $locale = config('app.fallback_locale');
+            $locale = Config::get('app.fallback_locale');
         }
 
         App::setLocale($locale);
