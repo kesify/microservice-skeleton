@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redis;
 use Kesify\MicroserviceSkeleton\Services\OrganizationService;
+use Laravel\Passport\Exceptions\AuthenticationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class SetOrganization
@@ -35,6 +36,8 @@ class SetOrganization
                 App::instance('organizationUserRelation', $organizationUserRelation);
                 App::instance('organization', $organization);
                 setPermissionsTeamId($organization->id);
+            }else{
+                throw new AuthenticationException('Unauthenticated.');
             }
         }
 
