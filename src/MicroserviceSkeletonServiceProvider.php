@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse;
 use Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware;
+use Kesify\MicroserviceSkeleton\Http\Middleware\ResolveOrganization;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
 use Kesify\MicroserviceSkeleton\Http\Middleware\VerifyGatewaySignature;
 use Kesify\MicroserviceSkeleton\Models\Organization;
@@ -150,7 +151,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
     {
         $router = $this->app->make(Router::class);
 
-        $router->aliasMiddleware('SetOrganization', SetOrganization::class);
+        $router->aliasMiddleware('ResolveOrganization', ResolveOrganization::class);
         $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
         $router->aliasMiddleware('JsonResponse', JsonResponse::class);
         $router->aliasMiddleware('VerifyGatewaySignature', VerifyGatewaySignature::class);
