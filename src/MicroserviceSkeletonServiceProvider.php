@@ -9,7 +9,7 @@ use Illuminate\Routing\Router;
 use Kesify\MicroserviceSkeleton\Http\Middleware\JsonResponse;
 use Kesify\MicroserviceSkeleton\Http\Middleware\LanguageMiddleware;
 use Kesify\MicroserviceSkeleton\Http\Middleware\SetOrganization;
-use Kesify\MicroserviceSkeleton\Http\Middleware\CheckTokenValidity;
+use Kesify\MicroserviceSkeleton\Http\Middleware\VerifyGatewaySignature;
 use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
 use Kesify\MicroserviceSkeleton\Services\FileStorageService;
@@ -107,6 +107,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/Config/microservice.php' => $this->app->configPath('microservice.php'),
             __DIR__ . '/Config/filestorage.php' => $this->app->configPath('filestorage.php'),
+            __DIR__ . '/Config/gateway.php' => $this->app->configPath('gateway.php'),
             __DIR__ . '/routes/api.php' => $this->app->basePath('routes/api.php'),
             __DIR__ . '/.env.microservice-example' => $this->app->basePath('.env.microservice-example'),
             __DIR__ . '/migrations/add_microservice.php' => $this->app->basePath('/database/migrations/'. date('Y_m_d_His') . '_add_microservice.php'),
@@ -152,6 +153,7 @@ class MicroserviceSkeletonServiceProvider extends ServiceProvider
         $router->aliasMiddleware('SetOrganization', SetOrganization::class);
         $router->aliasMiddleware('LanguageMiddleware', LanguageMiddleware::class);
         $router->aliasMiddleware('JsonResponse', JsonResponse::class);
+        $router->aliasMiddleware('VerifyGatewaySignature', VerifyGatewaySignature::class);
     }
 
     protected function registerController(): void
