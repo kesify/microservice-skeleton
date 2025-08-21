@@ -59,6 +59,7 @@ trait APIResponse{
         $responseStructure = [
             'message' => $data['message'] ?? ($data['success'] ? 'success' : 'failed'),
             'result' => $data['result'] ?? null,
+            'error_code' => $data['error_code'] ?? 'K-0',
         ];
 
         if (isset($data['errors'])) {
@@ -87,7 +88,7 @@ trait APIResponse{
 
         if (isset($data['success']) && $data['success'] === false) {
             $responseStructure['message'] = $responseStructure['message'] ?? 'failed';
-            $responseStructure['error_code'] = $data['error_code'] ?? 'K-0';
+            $responseStructure['error_code'] = $data['error_code'];
         }
 
         return ["content" => $responseStructure, "statusCode" => $statusCode, "headers" => $headers];
