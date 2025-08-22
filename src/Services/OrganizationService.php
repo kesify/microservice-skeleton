@@ -4,6 +4,7 @@ namespace Kesify\MicroserviceSkeleton\Services;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -122,21 +123,28 @@ class OrganizationService
 
     public function resolveOrganizationMeta(string $organizationId): ?array
     {
-        if (class_exists(Organization::class)) {
+        return Cache::remember("org:meta:{$organizationId}", 300, function () use ($organizationId) {
             $org = Organization::query()
                 ->select(['id','name'])
-                ->where('id', $organizationId)
+                ->with(['databaseRecord:id,organization_id,db_name'])
+                ->whereKey($organizationId)
                 ->first();
 
-            if ($org) {
-                return [
-                    'id'       => (string) $org->id,
-                    'database' => (string) $org->database->db_name,
-                    'name'     => (string) $org->name,
-                ];
+            if (!$org) {
+                return null;
             }
-        }
 
-        return null;
+            $dbName = $org->databaseRecord?->db_name ?? $org->database;
+
+            if (!$dbName) {
+                return null;
+            }
+
+            return [
+                'id'       => (string) $org->id,
+                'name'     => (string) $org->name,
+                'database' => (string) $dbName,
+            ];
+        });
     }
 }
