@@ -124,14 +124,14 @@ class OrganizationService
     {
         if (class_exists(Organization::class)) {
             $org = Organization::query()
-                ->select(['id','database','name'])
+                ->select(['id','name'])
                 ->where('id', $organizationId)
                 ->first();
 
             if ($org) {
                 return [
                     'id'       => (string) $org->id,
-                    'database' => (string) $org->database, // z. B. tenant_123
+                    'database' => (string) $org->database->db_name,
                     'name'     => (string) $org->name,
                 ];
             }
