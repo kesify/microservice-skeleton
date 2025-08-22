@@ -119,4 +119,24 @@ class OrganizationService
 
         return null;
     }
+
+    public function resolveOrganizationMeta(string $organizationId): ?array
+    {
+        if (class_exists(Organization::class)) {
+            $org = Organization::query()
+                ->select(['id','database','name'])
+                ->where('id', $organizationId)
+                ->first();
+
+            if ($org) {
+                return [
+                    'id'       => (string) $org->id,
+                    'database' => (string) $org->database, // z. B. tenant_123
+                    'name'     => (string) $org->name,
+                ];
+            }
+        }
+
+        return null;
+    }
 }
