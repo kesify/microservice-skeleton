@@ -6,42 +6,64 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redis;
-use Kesify\MicroserviceSkeleton\Support\AccessToken;
 use Kesify\MicroserviceSkeleton\Traits\APIResponse;
+use Kesify\MicroserviceSkeleton\Support\AccessToken;
 
 class ResolveOrganization
 {
     use APIResponse;
+
     public function handle(Request $request, Closure $next)
     {
-        $auth  = $request->header('Authorization');
-        $token = AccessToken::fromRequest($auth);
-        if (!$token) {
-            return $this->apiResponse(['success'=>false,'message'=>'Missing token'], 401);
+        $headersCfg = config('gateway.headers', []);
+
+        $orgId  = $request->attributes->get('ctx_org_id');
+        $userId = $request->attributes->get('ctx_user_id');
+
+        if (!$orgId) {
+            $orgId  = $request->header($headersCfg['org_id']  ?? 'X-Org-Id', '');
+            $userId = $userId ?: $request->header($headersCfg['user_id'] ?? 'X-User-Id', '');
         }
 
-        $hash = AccessToken::hash($token);
-        $key  = "at:{$hash}:org";
+        if ($orgId) {
+            $ctx = [
+                'organization_id'     => $orgId,
+                'user_id'             => $userId ?: null,
+            ];
 
-        $json = Redis::get($key);
-        if (!$json) {
-            return $this->apiResponse(['success'=>false,'message'=>'Organization not selected'], 428);
+            // expose for controllers/services
+            $request->attributes->add([
+                'organization'         => $ctx,
+                'organization_id'      => $ctx['organization_id'],
+                'organization_user_id' => $ctx['user_id'],
+            ]);
+            App::instance('organization', $ctx);
+
+            return $next($request);
         }
-        $ctx = json_decode($json, true) ?: [];
 
-        if (empty($ctx['organization_id'])) {
-            return $this->apiResponse(['success'=>false,'message'=>'Organization missing'], 428);
+        // 2) Fallback: Gateway mode with Bearer token -> read org mapping from Redis
+        $authHeader = $request->header('Authorization');
+        if ($authHeader) {
+            $token = AccessToken::fromRequest($authHeader);
+            if ($token) {
+                $hash = AccessToken::hash($token);
+                $key  = "at:{$hash}:org";
+                if ($json = Redis::get($key)) {
+                    $ctx = json_decode($json, true) ?: [];
+                    if (!empty($ctx['organization_id'])) {
+                        $request->attributes->add([
+                            'organization'         => $ctx,
+                            'organization_id'      => $ctx['organization_id'],
+                            'organization_user_id' => $ctx['user_id'] ?? null,
+                        ]);
+                        App::instance('organization', $ctx);
+                        return $next($request);
+                    }
+                }
+            }
         }
-
-        $request->attributes->add([
-            'organization'    => $ctx,
-            'organization_id' => $ctx['organization_id'],
-            'organization_user_id' => $ctx['user_id'] ?? null,
-        ]);
-
-        App::instance('organization', $ctx);
 
         return $next($request);
     }
 }
-
