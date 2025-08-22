@@ -86,7 +86,6 @@ class ResolveOrganization
                 if ($json = Redis::get($key)) {
                     $ctx = json_decode($json, true) ?: [];
                     if (!empty($ctx['organization_id'])) {
-                        // Optional: Wenn du DB im Redis mit speicherst (empfohlen)
                         $orgMeta = OrganizationService()->resolveOrganizationMeta($ctx['organization_id']);
 
                         if (!$orgMeta || empty($orgMeta['database'])) {
