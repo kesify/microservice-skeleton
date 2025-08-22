@@ -22,20 +22,17 @@ class ResolveOrganization
     {
         $headersCfg = config('gateway.headers', []);
 
-        // 1) HMAC-Kontext bevorzugen (kommt aus VerifyGatewaySignature)
         $orgId  = $request->attributes->get('ctx_org_id');
         $userId = $request->attributes->get('ctx_user_id');
 
         if (!$orgId) {
-            // Fallback auf Header (falls Attributes nicht gesetzt)
             $orgId  = $request->header($headersCfg['org_id']  ?? 'X-Org-Id', '');
             $userId = $userId ?: $request->header($headersCfg['user_id'] ?? 'X-User-Id', '');
         }
 
         if ($orgId) {
-            // 2) Metadaten zur Org laden (insb. DB-Name) und DB-Connection umschalten
-            $orgSvc  = app(OrganizationService::class);
-            $orgMeta = $orgSvc->resolveOrganizationMeta($orgId);   // ['id'=>..., 'database'=>..., ...] oder null
+            $orgSvc  = OrganizationService();
+            $orgMeta = $orgSvc->resolveOrganizationMeta($orgId);
 
             if (!$orgMeta || empty($orgMeta['database'])) {
                 return $this->apiResponse([
@@ -46,8 +43,7 @@ class ResolveOrganization
             }
 
             try {
-                // Standard: Connection "tenant" aus config/database.php
-                $orgSvc->setOrganizationDatabase($orgMeta['database'], 'tenant');
+                $orgSvc->setOrganizationDatabase($orgMeta['database']);
             } catch (\Throwable $e) {
                 report($e);
                 return $this->apiResponse([
@@ -57,7 +53,6 @@ class ResolveOrganization
                 ], 500);
             }
 
-            // 3) Kontext für Controller/Services bereitstellen
             $ctx = [
                 'organization_id' => $orgId,
                 'user_id'         => $userId ?: null,
@@ -69,7 +64,6 @@ class ResolveOrganization
                 'organization_id'      => $ctx['organization_id'],
                 'organization_user_id' => $ctx['user_id'],
                 'organization_database'=> $ctx['database'],
-                'db_connection'        => 'tenant',
             ]);
             App::instance('organization', $ctx);
 
