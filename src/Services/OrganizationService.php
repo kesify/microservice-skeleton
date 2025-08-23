@@ -22,7 +22,6 @@ class OrganizationService
             return null;
         }
 
-        // 2) Modell laden (kein Exception-Throw; Signatur erlaubt null)
         return Organization::query()->find($id);
     }
 

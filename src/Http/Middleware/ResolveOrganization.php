@@ -93,7 +93,7 @@ class ResolveOrganization
                         }
 
                         try {
-                            OrganizationService()->setOrganizationDatabase($organization->database);
+                            $orgSvc->setOrganizationDatabase($organization->database);
                         } catch (\Throwable $e) {
                             report($e);
                             return $this->apiResponse([

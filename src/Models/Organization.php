@@ -17,7 +17,7 @@ class Organization extends Model
     protected $connection = 'main';
 
     protected $fillable = [
-        'name','firstname','lastname','email','phonenumber','fax','vat',
+        'name','firstname','lastname','email','phone_number','fax','vat',
         'locale','language','active','public','deleted','logo_light_id','logo_dark_id',
     ];
 
