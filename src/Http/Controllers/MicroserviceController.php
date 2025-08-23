@@ -2,10 +2,8 @@
 
 namespace Kesify\MicroserviceSkeleton\Http\Controllers;
 
-use http\Env\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
-use Kesify\MicroserviceSkeleton\Support\CurrentOrganization;
+use Illuminate\Support\Facades\Request;
 
 class MicroserviceController extends Controller
 {
