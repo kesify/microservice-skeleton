@@ -19,12 +19,14 @@ class MicroserviceController extends Controller
 
             return $this->apiResponse([
                 'success'=> true,
+                'result'=> true,
                 'message'=>'Microservice installation successful'
             ]);
         }
 
         return $this->apiResponse([
             'success' => false,
+            'result'=> false,
             'message'=>'Microservice installation failed'
         ]);
     }
