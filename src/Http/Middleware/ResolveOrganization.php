@@ -55,6 +55,7 @@ class ResolveOrganization
 
             $ctx = [
                 'organization_id' => $orgId,
+                'organization_name' => $orgMeta['name'],
                 'user_id'         => $userId ?: null,
                 'database'        => $orgMeta['database'],
             ];
@@ -62,6 +63,7 @@ class ResolveOrganization
             $request->attributes->add([
                 'organization'         => $ctx,
                 'organization_id'      => $ctx['organization_id'],
+                'organization_name'      => $ctx['organization_name'],
                 'organization_user_id' => $ctx['user_id'],
                 'organization_database'=> $ctx['database'],
             ]);
