@@ -16,17 +16,10 @@ class OrganizationService
 {
     public function getOrganization(?string $organizationId = null): ?Organization
     {
-        $id = $organizationId
-            ?? request()->attributes->get('organization_id')                           // durch Middleware gesetzt
-            ?? (App::has('organization')
-                ? (App::get('organization') instanceof Organization
-                    ? App::get('organization')->getKey()
-                    : (App::get('organization')['organization_id']                     // unser Kontext-Array
-                        ?? App::get('organization')['id'] ?? null))
-                : null);
+        $id = $organizationId ?? (App::has('organization') ? App::get('organization')->id : null);
 
         if (!$id) {
-            return null; // keine Org im Kontext/Param
+            return null;
         }
 
         // 2) Modell laden (kein Exception-Throw; Signatur erlaubt null)

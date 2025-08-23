@@ -167,8 +167,8 @@ class FileStorageService
         ];
 
         if($organization){
-            $array['organization_id'] = $organization['organization_id'];
-            $array['organization_name'] = $organization['organization_name'];
+            $array['organization_id'] = $organization->id;
+            $array['organization_name'] = $organization->name;
         }
 
         return array_merge($array, $externFillables);
