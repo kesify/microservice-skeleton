@@ -2,16 +2,18 @@
 
 namespace Kesify\MicroserviceSkeleton\Http\Controllers;
 
+use http\Env\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
+use Kesify\MicroserviceSkeleton\Support\CurrentOrganization;
 
 class MicroserviceController extends Controller
 {
     private $organization;
 
-    public function install(): \Illuminate\Http\JsonResponse
+    public function install(Request $request): \Illuminate\Http\JsonResponse
     {
-        $this->organization = App::bound('organization') ? App::get('organization') : null;
+        $this->organization = $request->get('organization_id') ?? null;
 
         if($this->organization){
             $this->runMigration();

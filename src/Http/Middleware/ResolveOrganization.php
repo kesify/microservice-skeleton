@@ -70,7 +70,6 @@ class ResolveOrganization
             return $next($request);
         }
 
-        // 4) Fallback: Gateway-Modus mit Bearer-Token → Redis-Mapping
         $authHeader = $request->header('Authorization');
         if ($authHeader) {
             $token = AccessToken::fromRequest($authHeader);
@@ -104,7 +103,6 @@ class ResolveOrganization
                             'organization_id'       => $ctx['organization_id'],
                             'organization_user_id'  => $ctx['user_id'] ?? null,
                             'organization_database' => $ctx['database'],
-                            'db_connection'         => 'tenant',
                         ]);
                         App::instance('organization', $ctx);
 
