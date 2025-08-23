@@ -30,11 +30,12 @@ class ResolveOrganization
             $userId = $userId ?: $request->header($headersCfg['user_id'] ?? 'X-User-Id', '');
         }
 
-        if ($orgId) {
-            $orgSvc  = OrganizationService();
-            $orgMeta = $orgSvc->resolveOrganizationMeta($orgId);
+        $orgSvc  = OrganizationService();
 
-            if (!$orgMeta || empty($orgMeta['database'])) {
+        if ($orgId) {
+            $organization = $orgSvc->getOrganization($orgId);
+
+            if (!$organization || empty($organization->database)) {
                 return $this->apiResponse([
                     'success'    => false,
                     'message'    => 'Organization database not configured',
@@ -43,7 +44,7 @@ class ResolveOrganization
             }
 
             try {
-                $orgSvc->setOrganizationDatabase($orgMeta['database']);
+                $orgSvc->setOrganizationDatabase($organization->database);
             } catch (\Throwable $e) {
                 report($e);
                 return $this->apiResponse([
@@ -55,9 +56,9 @@ class ResolveOrganization
 
             $ctx = [
                 'organization_id' => $orgId,
-                'organization_name' => $orgMeta['name'],
+                'organization_name' => $organization->name,
                 'user_id'         => $userId ?: null,
-                'database'        => $orgMeta['database'],
+                'database'        => $organization->database,
             ];
 
             $request->attributes->add([
@@ -67,7 +68,9 @@ class ResolveOrganization
                 'organization_user_id' => $ctx['user_id'],
                 'organization_database'=> $ctx['database'],
             ]);
-            App::instance('organization', $ctx);
+
+            setPermissionsTeamId($ctx['organization_id']);
+            App::instance('organization', $organization);
 
             return $next($request);
         }
@@ -81,16 +84,16 @@ class ResolveOrganization
                 if ($json = Redis::get($key)) {
                     $ctx = json_decode($json, true) ?: [];
                     if (!empty($ctx['organization_id'])) {
-                        $orgMeta = OrganizationService()->resolveOrganizationMeta($ctx['organization_id']);
+                        $organization = $orgSvc->getOrganization($ctx['organization_id']);
 
-                        if (!$orgMeta || empty($orgMeta['database'])) {
+                        if (!$organization || empty($organization->database)) {
                             return $this->apiResponse([
                                 'success'=>false,'message'=>'Organization database not configured','error_code'=>'ORG-DB-0'
                             ], 503);
                         }
 
                         try {
-                            OrganizationService()->setOrganizationDatabase($orgMeta['database']);
+                            OrganizationService()->setOrganizationDatabase($organization->database);
                         } catch (\Throwable $e) {
                             report($e);
                             return $this->apiResponse([
@@ -98,7 +101,7 @@ class ResolveOrganization
                             ], 500);
                         }
 
-                        $ctx['database'] = $orgMeta['database'];
+                        $ctx['database'] = $organization->database;
 
                         $request->attributes->add([
                             'organization'          => $ctx,
@@ -106,7 +109,9 @@ class ResolveOrganization
                             'organization_user_id'  => $ctx['user_id'] ?? null,
                             'organization_database' => $ctx['database'],
                         ]);
-                        App::instance('organization', $ctx);
+
+                        setPermissionsTeamId($ctx['organization_id']);
+                        App::instance('organization', $organization);
 
                         return $next($request);
                     }

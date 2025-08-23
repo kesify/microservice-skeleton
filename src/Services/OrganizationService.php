@@ -10,17 +10,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Kesify\MicroserviceSkeleton\Models\Organization;
 use Kesify\MicroserviceSkeleton\Models\OrganizationUser;
+use Illuminate\Http\Request;
 
 class OrganizationService
 {
     public function getOrganization(?string $organizationId = null): ?Organization
     {
-        if($organizationId){
-            return Organization::findOrFail($organizationId);
+        $id = $organizationId
+            ?? request()->attributes->get('organization_id')                           // durch Middleware gesetzt
+            ?? (App::has('organization')
+                ? (App::get('organization') instanceof Organization
+                    ? App::get('organization')->getKey()
+                    : (App::get('organization')['organization_id']                     // unser Kontext-Array
+                        ?? App::get('organization')['id'] ?? null))
+                : null);
+
+        if (!$id) {
+            return null; // keine Org im Kontext/Param
         }
 
-        return App::get('organization') ?? null;
+        // 2) Modell laden (kein Exception-Throw; Signatur erlaubt null)
+        return Organization::query()->find($id);
     }
+
 
     public function setOrganizationDatabase(string $db): ?true
     {
