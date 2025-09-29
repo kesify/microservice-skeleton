@@ -16,7 +16,6 @@ class VerifyGatewaySignature
         $headers    = config('gateway.headers', []);
         $secret     = (string) config('gateway.hmac_secret', '');
         $skew       = (int) config('gateway.skew', 60);
-        $requireOrg = (bool) config('gateway.require_org', true);
 
         if ($secret === '') {
             return $this->apiResponse([
@@ -45,17 +44,6 @@ class VerifyGatewaySignature
                 'success'=>false, 'message'=>'Timestamp is missing', 'error_code'=>'GWSIG-02'
             ], 400);
         }
-        if ($userId === '') {
-            return $this->apiResponse([
-                'success'=>false, 'message'=>'User ID is missing', 'error_code'=>'GWSIG-05'
-            ], 400);
-        }
-        if ($requireOrg && $orgId === '') {
-            return $this->apiResponse([
-                'success'=>false, 'message'=>'Organization is required', 'error_code'=>'GWSIG-06'
-            ], 428); // Precondition Required
-        }
-
         if (!ctype_digit((string) $ts)) {
             return $this->apiResponse([
                 'success'=>false, 'message'=>'Timestamp format is invalid', 'error_code'=>'GWSIG-02A'
@@ -77,10 +65,10 @@ class VerifyGatewaySignature
         }
 
         $parts = [
-            'user_id'   => $userId,
-            'org_id'    => $orgId,
-            'scopes'    => $scopes,
-            'token_id'  => $tokenId,
+            'user_id'   => $userId ?? null,
+            'org_id'    => $orgId ?? null,
+            'scopes'    => $scopes ?? null,
+            'token_id'  => $tokenId ?? null,
             'timestamp' => $ts,
             'method'    => $request->getMethod(),
             'path'      => $request->path(),
