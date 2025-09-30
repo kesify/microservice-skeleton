@@ -37,8 +37,22 @@ class FileStorage extends Model
         $path = $path ?? $this->path;
         $disk = $disk ?? $this->disk;
         if($path && $disk){
-            return Storage::disk($disk)->temporaryUrl($path, now()->addMinutes(5));
+            if($this->isPublicKey($path)){
+                $relativePath = preg_replace('#^public/#', '', ltrim($path, '/'));
+                return Storage::disk($disk)->url($relativePath);
+            }else
+                return Storage::disk($disk)->temporaryUrl($path,now()->addMinutes(10));
         }else
             return null;
+    }
+
+    protected function isPublicKey(string $key): bool
+    {
+        return str_starts_with($key, 'public/');
+    }
+
+    protected function isProtectedKey(string $key): bool
+    {
+        return str_starts_with($key, 'protected/');
     }
 }
